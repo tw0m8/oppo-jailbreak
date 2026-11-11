@@ -13,9 +13,18 @@ that wins root on a locked device, the Android app that runs it, and the operati
 that turns a ~60% race into a tool you can actually use.
 
 **Verified working on a retail OPPO Find X8s (PKT110) running the latest ColorOS 17 / Android 17
-build as of mid-November 2026** — ColorOS `17.0.0.102`, bootloader locked, kernel
-`6.6.118-android15-8-g9bc34d5b0c79-abogki537459655-4k`. Root was reproduced on that build
-repeatedly (see the measured results below), not on an older firmware.
+build as of mid-November 2026**, bootloader locked:
+
+| | |
+|---|---|
+| Version number | `PKT110_17.0.0.102(CN01C10P02)` |
+| Android | 17, security update 1 September 2026 |
+| Kernel | `6.6.118-android15-8-g9bc34d5b0c79-abogki537459655-4k` |
+| Bootloader | locked, unlock not available |
+
+Root was reproduced on that build repeatedly (see the measured results below), not on an older
+firmware. The kernel release is the line that matters — if yours differs, the constants do not
+apply. [Settings screenshot](docs/img/about-device.jpg).
 
 <p align="center">
   <img src="media/rootnow-rooted.png" alt="RootNow showing a ROOTED verdict with uid=0 in the ksu SELinux context" width="340">
