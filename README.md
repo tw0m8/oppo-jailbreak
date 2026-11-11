@@ -1,7 +1,7 @@
-# RootNow
+# OPPO Jailbreak
 
 **Temporary root for locked-bootloader OPPO / ColorOS phones.** One tap, about five seconds, no
-unlock, no fastboot, no data wipe.
+unlock, no fastboot, no data wipe. The app that does it is called **RootNow**.
 
 ![status](https://img.shields.io/badge/status-field--tested-3DDC84?style=flat-square)
 ![tested](https://img.shields.io/badge/tested-Android%2017%20%C2%B7%20ColorOS%2017-3DDC84?style=flat-square)
