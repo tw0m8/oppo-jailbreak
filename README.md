@@ -12,8 +12,10 @@ image, install KernelSU — is closed. This repo is the other route: a kernel ti
 that wins root on a locked device, the Android app that runs it, and the operational discipline
 that turns a ~60% race into a tool you can actually use.
 
-Tested on **OPPO Find X8s (PKT110, MT6991)**, ColorOS 17 CN, Android 17, bootloader locked,
-kernel `6.6.118-android15-8-g9bc34d5b0c79-abogki537459655-4k`.
+**Verified working on a retail OPPO Find X8s (PKT110) running the latest ColorOS 17 / Android 17
+build as of mid-November 2026** — ColorOS `17.0.0.102`, bootloader locked, kernel
+`6.6.118-android15-8-g9bc34d5b0c79-abogki537459655-4k`. Root was reproduced on that build
+repeatedly (see the measured results below), not on an older firmware.
 
 <p align="center">
   <img src="media/rootnow-rooted.png" alt="RootNow showing a ROOTED verdict with uid=0 in the ksu SELinux context" width="340">
