@@ -15,6 +15,22 @@ that turns a ~60% race into a tool you can actually use.
 Tested on **OPPO Find X8s (PKT110, MT6991)**, ColorOS 17 CN, Android 17, bootloader locked,
 kernel `6.6.118-android15-8-g9bc34d5b0c79-abogki537459655-4k`.
 
+<p align="center">
+  <img src="media/rootnow-rooted.png" alt="RootNow showing a ROOTED verdict with uid=0 in the ksu SELinux context" width="340">
+</p>
+
+## Proof it is real root
+
+The app saying "rooted" proves nothing on its own. Two independent apps agree:
+
+<p align="center">
+  <img src="media/kernelsu-working.png" alt="KernelSU-Next manager reporting Working, LKM, Jailbreak mode, 3 superusers and 2 modules" width="330">
+  <img src="media/root-checker.png" alt="Root Checker Basic reporting root access is properly installed" width="330">
+</p>
+
+Left: KernelSU-Next sees a loaded LKM in jailbreak mode, with superusers and modules. Right: a
+third-party checker that has no knowledge of this project reports root present on the device.
+
 ## What you get
 
 - `uid=0(root)` with SELinux context `u:r:ksu:s0` — real root, not a fake shell
@@ -92,6 +108,7 @@ SKILL.md            the Hermes skill: triggers, procedure, pitfalls
 docs/RUNBOOK.md     per-attempt checklist and the failure → action table
 docs/BUILD.md       payload rebuild recipe, constants, tuning knobs
 docs/APP-NOTES.md   boot guard, independent verification, log integrity
+media/              screenshots used in this README
 dist/               the APK and its checksum
 ```
 
@@ -101,7 +118,8 @@ them.
 
 ## Credits
 
-- [KernelSU](https://github.com/tiann/KernelSU) — the in-kernel `su` this exploit late-loads
+- [KernelSU](https://github.com/tiann/KernelSU) and [KernelSU-Next](https://github.com/KernelSU-Next/KernelSU-Next) —
+  the in-kernel `su` this exploit late-loads; the manager in the screenshot is KernelSU-Next v3.4.2
 - [Magisk](https://github.com/topjohnwu/Magisk) — the prior art that made Android root legible
 
 ## License
