@@ -167,6 +167,8 @@ own root detection can still refuse; see the section above.
 - **Pinned to one kernel build.** A system update breaks the exploit until the constants are
   re-derived; `STATIC_TIMER_SITE` can only come from a live trace, never from symbols.
 - **A lost race can panic the device.** It happened once here, on a first-boot attempt.
+- **The app's UI is unfinished.** RootNow works and the exploit is solid, but the interface is a
+  work in progress — functional, not polished. Good enough to use; not what the project is about.
 - **One device tested.** This is not a claim about other OPPO, OnePlus or realme models.
 
 **Not for you if:** your bootloader can be unlocked (use fastboot and a proper KernelSU install),
@@ -200,3 +202,7 @@ them.
 ## License
 
 MIT — see [LICENSE](LICENSE). Use it only on hardware you own.
+
+---
+
+Made with DeepSeek.
