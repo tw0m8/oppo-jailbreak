@@ -14,8 +14,21 @@ kernel `6.6.118-android15-8-g9bc34d5b0c79-abogki537459655-4k`.
 - `docs/BUILD.md` — how the payload is rebuilt and verified against the shipped binary
 - `docs/APP-NOTES.md` — the app-side engineering that turns a 60% exploit into a usable tool
 
-Not here: the exploit payload (`timer`), the KernelSU daemon (`ksud`), and the Android app
-source. They are device- and build-specific and stay out of the repo.
+Not here: the payload source (`timer.c`), the KernelSU daemon source, and the Android app source.
+The APK in `dist/` does bundle the compiled payload and `ksud` as assets, since the app cannot
+run without them.
+
+## Install
+
+`dist/RootNow-v4.8.apk` (versionCode 38, signed with the dev keystore) is the app that drove all
+the runs in this repo's notes. Verify before installing:
+
+```bash
+sha256sum -c dist/SHA256SUMS
+```
+
+Two caveats: the app contains the pinned payload digest, so a different `timer` binary requires
+a rebuild, and it is debug-signed — install it as a sideload, not a store app.
 
 ## The short version
 
