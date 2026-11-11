@@ -39,6 +39,17 @@ third-party checker that has no knowledge of this project reports root present o
 - Survives app restarts, **dies at reboot** — reboot is also the cleanup
 - Reversible by design: each run parks one kernel page, and a reboot releases it
 
+## See it run
+
+<p align="center">
+  <img src="media/rootnow-demo.gif" alt="Tapping Start in RootNow, the exploit log streaming, and KernelSU-Next reporting Working" width="300">
+</p>
+
+Tap Start, wait about five seconds, and KernelSU-Next confirms the module is loaded. In this take
+the exec completed in **296 ms** and the page was reclaimed **1237 ms** after the free — which is
+why the old 400 ms wait window was marginal and why it now allows 10 s.
+([higher-quality MP4](media/rootnow-demo.mp4))
+
 ## Quick start
 
 ```bash
