@@ -47,6 +47,8 @@ third-party checker that has no knowledge of this project reports root present o
 - `uid=0(root)` with SELinux context `u:r:ksu:s0` — real root, not a fake shell
 - Runs on top of Shizuku (shell-level execution) — no bootloader unlock, no data wipe
 - KernelSU late-loaded (`ksud --kmi android15-6.6`), so `su` and its module path exist
+- **Play Integrity still passes** — all three verdicts, verified with root active, because verified
+  boot is untouched
 - Survives app restarts, **dies at reboot** — reboot is also the cleanup
 - Reversible by design: each run parks one kernel page, and a reboot releases it
 
@@ -95,6 +97,23 @@ grep -c kernelsu /proc/modules  # 1
 
 If those disagree with the app, believe them, not the app.
 
+## Play Integrity
+
+Root does not touch verified boot here: the bootloader stays locked and nothing on the system
+partition changes, so Play Integrity keeps returning all three verdicts **with root active**:
+
+<p align="center">
+  <img src="media/play-integrity.png" alt="Play Integrity API Checker showing MEETS_BASIC_INTEGRITY, MEETS_DEVICE_INTEGRITY and MEETS_STRONG_INTEGRITY all passing" width="420">
+</p>
+
+- `MEETS_BASIC_INTEGRITY` ✓
+- `MEETS_DEVICE_INTEGRITY` ✓
+- `MEETS_STRONG_INTEGRITY` ✓
+
+Honest scope: that is Play Integrity's judgement, not a promise about every banking app. Apps that
+run their own root checks — looking for `su`, the manager package, or unexpected kernel modules —
+can still refuse. Test with the app you actually care about.
+
 ## How it works
 
 1. **Plant** — a freed timer page is reused so a controlled object lands where the kernel will use
@@ -133,7 +152,8 @@ Per-attempt checklist: [`docs/RUNBOOK.md`](docs/RUNBOOK.md). Log lines decoded:
 ## What it does not do
 
 - **No persistence.** Nothing survives a reboot; there is no daemon, no boot hook, no auto-root.
-- **No Play Integrity workaround.** Root is visible to anything that checks.
+- **No hiding from app-level root detection.** Play Integrity passes, but an app that hunts for
+  `su` itself is a different matter.
 - **No other kernel.** One build, one address table. An OTA retires the exploit until the
   constants are re-derived.
 - **No module management.** The app loads KernelSU and stops there; install the manager if you
@@ -142,7 +162,8 @@ Per-attempt checklist: [`docs/RUNBOOK.md`](docs/RUNBOOK.md). Log lines decoded:
 ## Limits — read before installing
 
 - **Root dies at reboot.** Every boot needs a new run.
-- **Play Integrity trips.** Banking and some payment apps may refuse to run with root present.
+- **Play Integrity keeps passing** (all three verdicts, measured with root active). Apps with their
+own root detection can still refuse; see the section above.
 - **Pinned to one kernel build.** A system update breaks the exploit until the constants are
   re-derived; `STATIC_TIMER_SITE` can only come from a live trace, never from symbols.
 - **A lost race can panic the device.** It happened once here, on a first-boot attempt.

@@ -100,6 +100,8 @@ uname -r                       # guard against a kernel change
 
 ## Limits To State Out Loud
 
-Root dies at reboot. Play Integrity trips, so banking and some payment apps may refuse to run.
+Root dies at reboot. Play Integrity still passes on the reference device (basic, device and strong
+verdicts, measured with root active) because verified boot stays intact; apps with their own root
+detection can still refuse.
 A system update changes the kernel and kills the exploit until constants are re-derived -
 `STATIC_TIMER_SITE` can only come from a live trace, not from symbols.
