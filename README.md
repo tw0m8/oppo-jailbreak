@@ -50,6 +50,25 @@ third-party checker that has no knowledge of this project reports root present o
 - Survives app restarts, **dies at reboot** — reboot is also the cleanup
 - Reversible by design: each run parks one kernel page, and a reboot releases it
 
+## Quick start
+
+```bash
+sha256sum -c dist/SHA256SUMS      # 1. verify
+adb install -r dist/RootNow-v4.9.apk   # 2. sideload (debug-signed)
+```
+
+1. **Install Shizuku and start it.** RootNow runs the payload through Shizuku's user service as the
+   shell user; the exploit is what turns that into root. Grant RootNow the Shizuku permission.
+2. **Reboot the phone** before the first run — a parked page from an earlier attempt blocks every
+   retry in that boot.
+3. Charge above **30%** and turn **battery saver off**. The spray is CPU-bound; a throttled phone
+   loses the page race.
+4. Press **Start** once. Root lands in 3–5 s.
+5. Confirm independently: `su -c id` → `uid=0(root) … context=u:r:ksu:s0`.
+
+If it fails, **reboot before retrying**. The app enforces this with a boot marker instead of
+letting you burn another boot.
+
 ## See it run
 
 <p align="center">
@@ -61,24 +80,20 @@ the exec completed in **296 ms** and the page was reclaimed **1237 ms** after th
 why the old 400 ms wait window was marginal and why it now allows 10 s.
 ([higher-quality MP4](media/rootnow-demo.mp4))
 
-## Quick start
+## Verify it yourself
+
+Independent checks, none of which trust this app:
 
 ```bash
-sha256sum -c dist/SHA256SUMS      # 1. verify
-adb install -r dist/RootNow-v4.9.apk   # 2. sideload (debug-signed)
+su -c id                        # uid=0(root) ... context=u:r:ksu:s0
+grep -c kernelsu /proc/modules  # 1
 ```
 
-0. **Install Shizuku and start it.** RootNow runs the payload through Shizuku's user service as the
-   shell user; the exploit is what turns that into root. Grant RootNow the Shizuku permission.
-1. **Reboot** the phone before the first run — a parked page from an earlier attempt blocks every
-   retry in that boot.
-2. Charge above **30%** and turn **battery saver off**. The spray is CPU-bound; a throttled phone
-   loses the page race.
-3. Press **Start** once. Root lands in 3–5 s.
-4. Confirm independently: `su -c id` → `uid=0(root) … context=u:r:ksu:s0`.
+- **KernelSU-Next manager** — says *Working*, LKM, jailbreak mode
+- **Any third-party root checker** — reports root present
+- **From a PC** — `adb shell su -c id` returns the same `uid=0`
 
-If it fails, **reboot before retrying**. The app enforces this with a boot marker instead of
-letting you burn another boot.
+If those disagree with the app, believe them, not the app.
 
 ## How it works
 
@@ -111,7 +126,18 @@ The exploit is a race, not a switch. The two failure modes need different fixes:
 | `stage selinux failed` | SELinux-state write missed | treat as a lost race; reboot |
 | `su verification FAILED` | usually **not** a failure — the check ran before ksud finished | app re-verifies and overrules it |
 
-Per-attempt checklist: [`docs/RUNBOOK.md`](docs/RUNBOOK.md).
+Per-attempt checklist: [`docs/RUNBOOK.md`](docs/RUNBOOK.md). Log lines decoded:
+[`docs/LOG-REFERENCE.md`](docs/LOG-REFERENCE.md). When something refuses to run:
+[`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md).
+
+## What it does not do
+
+- **No persistence.** Nothing survives a reboot; there is no daemon, no boot hook, no auto-root.
+- **No Play Integrity workaround.** Root is visible to anything that checks.
+- **No other kernel.** One build, one address table. An OTA retires the exploit until the
+  constants are re-derived.
+- **No module management.** The app loads KernelSU and stops there; install the manager if you
+  want modules.
 
 ## Limits — read before installing
 
@@ -133,6 +159,9 @@ SKILL.md            the Hermes skill: triggers, procedure, pitfalls
 docs/RUNBOOK.md     per-attempt checklist and the failure → action table
 docs/BUILD.md       payload rebuild recipe, constants, tuning knobs
 docs/APP-NOTES.md   boot guard, independent verification, log integrity
+docs/LOG-REFERENCE.md  every log line explained
+docs/TROUBLESHOOTING.md  blocker codes, failure classes, what to do
+CHANGELOG.md        what changed in each app version
 media/              screenshots used in this README
 dist/               the APK and its checksum
 ```
