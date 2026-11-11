@@ -34,6 +34,7 @@ third-party checker that has no knowledge of this project reports root present o
 ## What you get
 
 - `uid=0(root)` with SELinux context `u:r:ksu:s0` — real root, not a fake shell
+- Runs on top of Shizuku (shell-level execution) — no bootloader unlock, no data wipe
 - KernelSU late-loaded (`ksud --kmi android15-6.6`), so `su` and its module path exist
 - Survives app restarts, **dies at reboot** — reboot is also the cleanup
 - Reversible by design: each run parks one kernel page, and a reboot releases it
@@ -42,9 +43,11 @@ third-party checker that has no knowledge of this project reports root present o
 
 ```bash
 sha256sum -c dist/SHA256SUMS      # 1. verify
-adb install -r dist/RootNow-v4.8.apk   # 2. sideload (debug-signed)
+adb install -r dist/RootNow-v4.9.apk   # 2. sideload (debug-signed)
 ```
 
+0. **Install Shizuku and start it.** RootNow runs the payload through Shizuku's user service as the
+   shell user; the exploit is what turns that into root. Grant RootNow the Shizuku permission.
 1. **Reboot** the phone before the first run — a parked page from an earlier attempt blocks every
    retry in that boot.
 2. Charge above **30%** and turn **battery saver off**. The spray is CPU-bound; a throttled phone
