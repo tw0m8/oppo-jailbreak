@@ -1,0 +1,5 @@
+*.apk
+*.bin
+*.keystore
+*.log
+__pycache__/
