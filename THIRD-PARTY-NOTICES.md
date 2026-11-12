@@ -9,6 +9,8 @@ components, not the MIT licence that covers this project's own code and document
 - Licence: **GPL-3.0**
 - What it is: the `ksud` daemon bundled in the APK, used to late-load the KernelSU kernel module
   (`ksud late-load --kmi android15-6.6 --allow-shell`). Redistributed unmodified.
+- Bundled digest: `sha256 2771a2ae989b522b5d70f3288ad5a2f379488962d09c1fe11e13a745eba89362`
+  (7,059,592 bytes). The binary does not embed a version string, so the digest is the identifier.
 - Source: available from the upstream repository at the corresponding release. If you need a
   written offer of source alongside a binary redistribution, open an issue.
 

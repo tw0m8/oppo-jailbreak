@@ -225,6 +225,16 @@ them.
   the in-kernel `su` this exploit late-loads; the manager in the screenshot is KernelSU-Next v3.4.2
 - [Magisk](https://github.com/topjohnwu/Magisk) — the prior art that made Android root legible
 
+## Responsible use
+
+This is a device-owner tool for hardware you physically control. It does not bypass a remote
+lock, an account lock, or any activation check — it gives the person holding the phone the same
+access the owner already has.
+
+Realistic consequences to accept first: it may void your warranty, a failed attempt can panic the
+device, and the vendor may patch the kernel in a future update, which retires this exploit. There
+is no warranty of any kind (MIT). Do not ship it in a product that promises root to other people.
+
 ## Contact
 
 Questions, corrections or takedown requests: **tw0m8.spouse849@passmail.com**
