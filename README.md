@@ -225,6 +225,10 @@ them.
   the in-kernel `su` this exploit late-loads; the manager in the screenshot is KernelSU-Next v3.4.2
 - [Magisk](https://github.com/topjohnwu/Magisk) — the prior art that made Android root legible
 
+## Contact
+
+Questions, corrections or takedown requests: **tw0m8.spouse849@passmail.com**
+
 ## License
 
 MIT — see [LICENSE](LICENSE). Bundled third-party components and their licences are listed in
