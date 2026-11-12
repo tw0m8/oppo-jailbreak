@@ -10,7 +10,7 @@ unlock, no fastboot, no data wipe. The app that does it is called **RootNow**.
 OPPO stopped handing out bootloader unlocks, so the usual route — unlock, flash a patched boot
 image, install KernelSU — is closed. This repo is the other route: a kernel timer-page exploit
 that wins root on a locked device, the Android app that runs it, and the operational discipline
-that turns a ~60% race into a tool you can actually use.
+that turns an unreliable race into a tool you can actually use.
 
 **Verified working on a retail OPPO Find X8s (PKT110) running the latest ColorOS 17 / Android 17
 build as of mid-November 2026**, bootloader locked:
@@ -51,6 +51,14 @@ third-party checker that has no knowledge of this project reports root present o
   boot is untouched
 - Survives app restarts, **dies at reboot** — reboot is also the cleanup
 - Reversible by design: each run parks one kernel page, and a reboot releases it
+
+## Requirements
+
+- **The kernel above.** Not "an OPPO" — that exact build. Everything else is a different
+  address table.
+- **arm64 device, ~10 MB free**, Android 15 or newer (the KMI is `android15-6.6`; verified on 17)
+- **Shizuku installed and running** — the app uses it to run the payload as the shell user
+- A **full reboot** before the attempt, and the willingness to reboot again if it fails
 
 ## Quick start
 
@@ -113,6 +121,23 @@ partition changes, so Play Integrity keeps returning all three verdicts **with r
 Honest scope: that is Play Integrity's judgement, not a promise about every banking app. Apps that
 run their own root checks — looking for `su`, the manager package, or unexpected kernel modules —
 can still refuse. Test with the app you actually care about.
+
+## Privacy
+
+The app has **no network permission at all** — `aapt2 dump permissions` on the shipped APK lists
+only Shizuku's API permission and `QUERY_ALL_PACKAGES` (for the debloat list). No analytics, no
+crash reporting, no update check.
+
+Everything it records stays in its own app directory: a run log and a `runs.csv` with verdict,
+duration, battery level and kernel version. Uninstalling the app deletes them.
+
+## Removing it
+
+1. **Reboot** — root is gone, the held page is released, the KernelSU module is unloaded
+2. Uninstall RootNow — the staged payload in its app directory goes with it
+3. Optional: uninstall the KernelSU manager if you installed it
+
+Nothing is written to the system partition, so there is no image to reflash.
 
 ## How it works
 
@@ -185,6 +210,7 @@ docs/APP-NOTES.md   boot guard, independent verification, log integrity
 docs/LOG-REFERENCE.md  every log line explained
 docs/TROUBLESHOOTING.md  blocker codes, failure classes, what to do
 CHANGELOG.md        what changed in each app version
+THIRD-PARTY-NOTICES.md  licences of the bundled ksud and Shizuku
 media/              screenshots used in this README
 dist/               the APK and its checksum
 ```
@@ -201,7 +227,8 @@ them.
 
 ## License
 
-MIT — see [LICENSE](LICENSE). Use it only on hardware you own.
+MIT — see [LICENSE](LICENSE). Bundled third-party components and their licences are listed in
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). Use it only on hardware you own.
 
 ---
 
